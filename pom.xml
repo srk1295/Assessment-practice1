@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.rajesh</groupId>
+    <artifactId>test1-boot-demo</artifactId>
+    <version>1.0</version>
+
+    <name>test1-boot-demo</name>
+    <url></url>
+
+    <parent>
+        <groupId>org.test1framework.boot</groupId>
+        <artifactId>test1-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>11</java.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.test1framework.boot</groupId>
+            <artifactId>test1-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.test1framework.boot</groupId>
+            <artifactId>test1-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.test1framework.boot</groupId>
+            <artifactId>test1-boot-starter-test</artifactId>
+            <scope>test-trial-1</scope>
+        </dependency>
+
+        <!-- debugging -->
+        <dependency>
+            <groupId>org.test1framework.boot</groupId>
+            <artifactId>test1-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <finalName>test1-boot-web</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.test1framework.boot</groupId>
+                <artifactId>test1-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+</project>
