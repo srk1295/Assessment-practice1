@@ -1,0 +1,89 @@
+
+Jenkins Pipeline file
+=============
+
+
+pipeline {
+    agent any
+    
+    tools {
+        jdk 'jdk17'
+        maven 'maven3'																	# Tools mentioned in manage jenkins tools
+    }
+    
+    environment{
+        SCANNER_HOME= tool 'sonar-scanner'							# Jenkins environment tools
+    }
+
+    stages {
+        stage('Git Checkout ') {
+            steps {
+                git branch: 'main', changelog: false, poll: false, url:  'xxxxxxxxxxxxxxxxxxxxxxxxxxx'     # Github repo url need to be filled
+            }
+        }
+        
+        stage('Code Compile') {
+            steps {
+                    sh "mvn compile"
+            }
+        }
+        
+        stage('Run Test1') {
+            steps {
+                    sh "mvn test"
+            }
+        }
+        
+        stage('Sonarqube Analysis') {
+            steps {
+                    withSonarQubeEnv('sonar-server') {
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Java-WebApp \
+                        -Dsonar.java.binaries=. \
+                        -Dsonar.projectKey=Java-WebApp '''
+    
+                }
+            }
+        }
+        
+        stage('OWASP Dependency Check') {
+            steps {
+                   dependencyCheck additionalArguments: '--scan ./   ', odcInstallation: 'DP'
+                   dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        
+        stage('Maven Build') {
+            steps {
+                    sh "mvn clean compile"
+            }
+        }
+        
+        stage('Docker Build & Push') {
+            steps {
+                   script {
+                       withDockerRegistry(credentialsId: 'b289dc43-2ede-4bd0-95e8-75ca26100d8d', toolName: 'docker') {
+                            sh "docker build -t webapp ."
+                            sh "docker tag webapp test1/webapp:latest"
+                            sh "docker push test1/webapp:latest "
+                        }
+                   } 
+            }
+        }
+        
+        stage('Docker Image scan') {
+            steps {
+                    sh "trivy image test1/webapp:latest "
+            }
+        }
+        
+    }
+}
+
+
+  ======================================================================================
+  ======================================================================================
+  Note:
+    Pipeline Syntax is used for security essential purpose.
+  ======================================================================================
+  ======================================================================================
+  
