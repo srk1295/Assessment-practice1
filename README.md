@@ -33,3 +33,18 @@ Updates and maintenance: implement a CICD pipeline for automated deployments and
 
 
 ######################################################################################################################################################
+Application built process:
+=========================
+
+A source code will be pulled from the github to build a pipeline, 
+From jenkins will build a pipeline in declarative method and  maven stage checks for the 'syntax error' on the built source code.
+Sonarqube is used to check the vulnerabilities on the project to convert into distributable format.
+OWASP tool is used to check the dependency of the var/Jar files of the project.
+Nexus repository is a central platform functions with a multiple artifacts for storing the source code 
+Docker is used to create Dockerfile from the maven build packages. 
+The Dockerfile will build images and pushed to dockerhub for repository as in public or private. 
+Docker container will be running by pulling the images from the dockerhub with an exposed port value defined under the dockerfile,
+Monitoring tools like cloudwatch will be used for graphical representation.
+Hence the build container will go live with the server, by QA teams for error free checks on the built application.
+finally job completes with Testing and validation as job completed with no errors.
+#########################################################################################################################################
