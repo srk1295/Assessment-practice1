@@ -1,0 +1,20 @@
+Hello team, 
+i have given the blind spot architecture of the Deploying Application on the AWS cloud using Monolithic server, 
+Due to insufficient network utility i was not able to build an server. but made an attempt to express how the application deploys from cloud to App.
+Including to all files i have added in additionally the extra commands to aware propaganda of the job.
+But the Selectal of the cloud deployment will works arranging order of deployment on the source code 
+like:
+step1: AWS cloud with monolithic server
+step2: IAM roles and polices
+Step3: Build ELB and Auto-Scaling
+Step4: Github Source code 
+Step5: pull the request from jira 
+Step6: jenkins build with essential source like Java, Maven, other following tools
+step7: install Sonarqube
+Step8: Install docker, terraform as (IaC)
+Step9: manage jenkins plugins and tools security for application build
+step10: test and validate with QA team 
+step11: finally once succeeded pushed to clients server for realtime.
+these are the following steps for a realtime deploying a code...
+
+Thank you...
