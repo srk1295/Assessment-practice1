@@ -25,3 +25,17 @@ Monitor and manage Application:
 CloudWatch: monitor an application health, performance metrics and logs, set up alarms for critical events.
 Auto Scaling Automatically adjust a resources (EC2 instances, Lambda functions) based on Traffic demands, optimizing cost and performance.
 Updates and maintenance: implement a CICD pipeline for automated deployments and updates, Regularly patch dependencies and perform security scans.
+
+######################################################################################################################################################
+######################################################################################################################################################
+
+
+
+
+
+
+
+
+
+![2d digram of deploying the cloud](https://github.com/srk1295/Assessment-practice1/assets/6206490/4e446ec0-5d75-4c68-9a4f-1081a7ad2c3b)
+
