@@ -18,3 +18,40 @@ COPY ${artifact} app.jar
 # This should not be changed
 
 ENTRYPOINT ["java","-jar","app.jar"]
+
+
+
+Docker cmds
+===========
+
+docker build -t (imageName) .
+
+docker push (imageName)
+docker pull (imageName)
+
+docker run -d --name (contianerName) -p 0000:8080 (imageName):(tags)
+
+docker create --name (Cname) -p (ports:Ports) (imageName)
+
+docker start (CID)
+
+docker stop (CID)
+
+docker restart (CID)
+============================================================
+docker images
+docker ps -a
+docker container ls
+-----------------------------------------------------------------------------------------------------
+docker images
+docker push <imageName>:<version>
+
+all layer will sit in ECR crosschecked
+============================================================
+docker pull
+user login access again to pull the image from ecr 
+> cross check with IAM roles are successfully tagged or not<
+============================================================
+docker pull <image url>:<version>(from ecr)
+cross check aws-cli installation
+IAM roles
