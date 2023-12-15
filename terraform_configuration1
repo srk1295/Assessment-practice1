@@ -1,0 +1,142 @@
+terraform configuration for virtual machines
+=============================
+
+# Provider configuration for AWS
+provider "aws" {
+  region = "us-east-1"  																		# Change this to desired AWS region
+}
+
+# Create a VPC
+resource "aws_vpc" "test1_vpc" {
+  cidr_block = "0.0.0.0/0"
+  enable_dns_support = true
+  enable_dns_hostnames = true
+
+  tags = {
+    Name = "test1_vpc-vpc"
+  }
+}
+
+# Create public and private subnets
+resource "aws_subnet" "public_subnet" {
+  count = 2
+
+  vpc_id                  = aws_vpc.test1_vpc.id
+  cidr_block              = "10.0.${count.index + 1}.0/24"  					# Change this as required
+  availability_zone       = "us-east-1a"  												# Change this to your desired availability zone
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "public-subnet-${count.index + 1}"
+  }
+}
+
+resource "aws_subnet" "private_subnet" {
+  count = 2
+
+  vpc_id                  = aws_vpc.test1_vpc.id
+  cidr_block              = "10.0.${count.index + 3}.0/24"						# Change this as required
+  availability_zone       = "us-east-1a" 											      	 # Change this to your desired availability zone
+
+  tags = {
+    Name = "private-subnet-${count.index + 1}"
+  }
+}
+
+# Create a security group for the EC2 instances
+resource "aws_security_group" "test1_sg" {
+  vpc_id = aws_vpc.test1_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  // Inbound rule for HTTP traffic
+  ingress {
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  // Inbound rule for SSH (for illustration purposes, consider restricting this in a production environment)
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  // Additional rules as needed
+}
+
+# Create an EC2 instance
+resource "aws_instance" "example_instance" {
+  count = 2
+
+  ami           = "ami-xxxxxxxxxxxxxxxx"															  # Change this to your desired AMI ID
+  instance_type = "t2.medium"            									   						     # Change this to your desired instance type
+  
+  
+  ==================================================================================================================================================
+  Note: 																																																								                        		|
+  			This tells terraform that we're going to be using AWS as your provider and that you want to deploy infrastructure into the AZ region. 			|
+																																																												                          	|
+							export AWS_access_key_id = ""  																																						                      			|
+							export AWS_secret_access-key = "" 																																				                    				|
+																																																												                          	|	
+			# Collect Access_key and secret_key from IAM roles and Policys which defined to work																													|
+			no need to to mention access_key and secret_key in provider section.																								               						|
+ ===================================================================================================================================================
+
+  subnet_id = aws_subnet.private_subnet[count.index].id
+  security_group_ids = [aws_security_group.test1_sg.id]
+
+  // User data script to install a web server (for illustration purposes)
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install -y httpd
+              service httpd start
+              chkconfig httpd on
+              echo "<html><body>
+			  <h1>Hello World from Instance ${count.index + 1}
+			  </h1>
+			  </body>
+			  </html>" 
+			  > /var/www/html/index.html
+              EOF
+
+  tags = {
+    Name = "test1-instance-${count.index + 1}"
+  }
+}
+
+# Create an Elastic Load Balancer (ELB)
+resource "aws_elb" "test1_elb" {
+  name               = "test1-elb"
+  availability_zones = ["us-east-1a", "us-east-1b"]  # Change this required availability zones
+
+  listener {
+    instance_port    		   = 80
+    instance_protocol	     = "http"
+    lb_port          			 = 80
+    lb_protocol      		   = "http"
+  }
+
+  health_check {
+    healthy_threshold 				       = 2
+    unhealthy_threshold 			       = 2
+    timeout            					     = 3
+    target              				 	   = "HTTP:80/"
+    interval          						   = 30
+  }
+
+  instances = aws_instance.test1_instance[*].id
+}
+
+
+
