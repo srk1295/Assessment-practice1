@@ -67,6 +67,39 @@ variable "ami_key_pair_name" {
 }
 
 ====================================================================================================
+Terraform cmds:
+===============
+
+terraform init     		# initializes a new or existing terraform configuration, downloading required providers and modules
+
+terraform validate		# configuration files for syntax errors and other issues.
+
+terraform plan			# execution plan, showing the changes that will be made
+
+terraform apply			# creating or modifying the infrastructure
+
+terraform destroy		# delete or destroy particular or all
+
+terraform destroy -target= <"  ">		# specific target
+
+terraform state rm <resource_type.resource_name>
+
+
+terraform show			# shows the current state  saved execution plan
+
+terraform state <sub-cmd>	# allowing to inspect, modify and perform other operations
+
+terraform refresh		# updates
+
+terraform output		# displays output defined
+
+terraform import <address> <id>  # resources that were not initially created with terraform.
+
+terraform fmt			# rewrites terraform files
+
+terraform version		# displays the version of terraform
+
+	 
 
 
 
